@@ -210,4 +210,13 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionMap()
+    {
+        $this->render('map');
+    }
+    public function actionMap1()
+    {
+        $this->render('map1');
+    }
 }

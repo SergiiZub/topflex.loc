@@ -17,6 +17,19 @@ $this->title = 'My Yii Application';
     <div class="body-content">
 
         <div class="row">
+<!--            --><?php
+/*            use dosamigos\google\maps\services\DirectionsClient;
+
+            $direction = new DirectionsClient([
+                'params' => [
+                    'language' => Yii::$app->language,
+                    'origin' => 'street from',
+                    'destination' => 'street to'
+                ]
+            ]);
+
+            $data = $direction->lookup();
+            */?>
             <div class="col-lg-4">
                 <h2>Heading</h2>
 
