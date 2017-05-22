@@ -5,7 +5,7 @@
  * Date: 19.05.17
  * Time: 17:54
  */
-var_dump($this);
+die('tut');
 ?>
 
 <div style="width: <?= $this->context->width ?>px;height: <?= $this->context->height ?>px">

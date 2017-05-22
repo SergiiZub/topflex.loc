@@ -211,8 +211,8 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionMyMap()
+    public function actionMap()
     {
-        $this->render('myMap');
+        return $this->render('myMap');
     }
 }

@@ -42,7 +42,6 @@ class Map extends Widget
     }
     public function run()
     {
-
         return $this->render('map');
     }
 }

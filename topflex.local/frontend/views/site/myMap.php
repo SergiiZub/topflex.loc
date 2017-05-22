@@ -6,24 +6,16 @@
  * Time: 17:56
  */
 
-?>
-
-<?php
 use frontend\widgets\map\Map;
 
-?>
-
-how to use widget:
-
-```php
-
-<?=
-
-Map::widget([
+echo Map::widget([
     'zoom' => 16,
-    'center' => 'Red Square',
+//    'center' => 'Red Square',
     'width' => 700,
     'height' => 400,
-    'mapType' => Map::MAP_TYPE_SATELLITE,
+    'mapType' => Map::MAP_TYPE_ROADMAP,
+    'sensor' => true,
+//    'markerFitBounds' => true,
+//    'mapType' => Map::MAP_TYPE_SATELLITE,
 ]);
-?>
+
