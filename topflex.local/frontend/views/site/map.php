@@ -5,72 +5,123 @@
  * Date: 19.05.17
  * Time: 17:54
  */
-die('tut');
+//die('tut');
+/*use dosamigos\google\maps\services\DirectionsClient;
+
+$direction = new DirectionsClient([
+    'params' => [
+        'language' => Yii::$app->language,
+        'origin' => 'street from',
+        'destination' => 'street to'
+    ]
+]);
+
+$data = $direction->lookup(); //get data from google.maps API
+var_dump($data);*/
+
+use dosamigos\google\maps\LatLng;
+use dosamigos\google\maps\services\DirectionsWayPoint;
+use dosamigos\google\maps\services\TravelMode;
+use dosamigos\google\maps\overlays\PolylineOptions;
+use dosamigos\google\maps\services\DirectionsRenderer;
+use dosamigos\google\maps\services\DirectionsService;
+use dosamigos\google\maps\overlays\InfoWindow;
+use dosamigos\google\maps\overlays\Marker;
+use dosamigos\google\maps\Map;
+use dosamigos\google\maps\services\DirectionsRequest;
+use dosamigos\google\maps\overlays\Polygon;
+use dosamigos\google\maps\layers\BicyclingLayer;
+
+$coord = new LatLng(['lat' => 39.720089311812094, 'lng' => 2.91165944519042]);
+$map = new Map([
+    'center' => $coord,
+    'zoom' => 14,
+]);
+
+// lets use the directions renderer
+$home = new LatLng(['lat' => 39.720991014764536, 'lng' => 2.911801719665541]);
+$school = new LatLng(['lat' => 39.719456079114956, 'lng' => 2.8979293346405166]);
+$santo_domingo = new LatLng(['lat' => 39.72118906848983, 'lng' => 2.907628202438368]);
+
+// setup just one waypoint (Google allows a max of 8)
+$waypoints = [
+    new DirectionsWayPoint(['location' => $santo_domingo])
+];
+
+$directionsRequest = new DirectionsRequest([
+    'origin' => $home,
+    'destination' => $school,
+    'waypoints' => $waypoints,
+    'travelMode' => TravelMode::DRIVING
+]);
+
+// Lets configure the polyline that renders the direction
+$polylineOptions = new PolylineOptions([
+    'strokeColor' => '#FFAA00',
+    'draggable' => true
+]);
+
+// Now the renderer
+$directionsRenderer = new DirectionsRenderer([
+    'map' => $map->getName(),
+    'polylineOptions' => $polylineOptions
+]);
+
+// Finally the directions service
+$directionsService = new DirectionsService([
+    'directionsRenderer' => $directionsRenderer,
+    'directionsRequest' => $directionsRequest
+]);
+
+// Thats it, append the resulting script to the map
+$map->appendScript($directionsService->getJs());
+
+// Lets add a marker now
+$marker = new Marker([
+    'position' => $coord,
+    'title' => 'My Home Town',
+]);
+
+// Provide a shared InfoWindow to the marker
+$marker->attachInfoWindow(
+    new InfoWindow([
+        'content' => '<p>This is my super cool content</p>'
+    ])
+);
+
+// Add marker to the map
+$map->addOverlay($marker);
+
+// Now lets write a polygon
+$coords = [
+    new LatLng(['lat' => 25.774252, 'lng' => -80.190262]),
+    new LatLng(['lat' => 18.466465, 'lng' => -66.118292]),
+    new LatLng(['lat' => 32.321384, 'lng' => -64.75737]),
+    new LatLng(['lat' => 25.774252, 'lng' => -80.190262])
+];
+
+$polygon = new Polygon([
+    'paths' => $coords
+]);
+
+// Add a shared info window
+$polygon->attachInfoWindow(new InfoWindow([
+    'content' => '<p>This is my super cool Polygon</p>'
+]));
+
+// Add it now to the map
+$map->addOverlay($polygon);
+
+
+// Lets show the BicyclingLayer :)
+$bikeLayer = new BicyclingLayer(['map' => $map->getName()]);
+
+// Append its resulting script
+$map->appendScript($bikeLayer->getJs());
+
+// Display the map -finally :)
+echo $map->display();
+
+var_dump($map->getPlugins());
 ?>
 
-<div style="width: <?= $this->context->width ?>px;height: <?= $this->context->height ?>px">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
-</div>
-<script>
-    var map;
-    var bounds;
-    function initialize() {
-        var geocoder = new google.maps.Geocoder();
-        window.map = new google.maps.Map(document.getElementById("map_canvas"),
-            {
-                zoom: <?= $this->context->zoom ?>,
-                mapTypeId: google.maps.MapTypeId.<?= $this->context->mapType ?>,
-                center: new google.maps.LatLng(0, 0)
-            }
-        );
-        <?php if ($this->context->markerFitBounds): ?>
-        window.bounds = new google.maps.LatLngBounds();
-        <?php elseif (is_array($this->context->center)): ?>
-        window.map.setCenter(new google.maps.LatLng(<?= $this->context->center[0] ?>, <?= $this->context->center[1] ?>));
-        <?php else: ?>
-        geocoder.geocode({
-            "address": "<?= $this->context->center ?>"
-        }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                window.map.setCenter(results[0].geometry.location);
-            }
-        });
-        <?php endif; ?>
-        <?php if (!empty($this->context->markers) && is_array($this->context->markers)): ?>
-        <?php foreach ($this->context->markers as $key => $marker): ?>
-        var marker_<?= $key ?> = new google.maps.Marker({
-            map: window.map
-        });
-        <?php if (isset($marker['title'])): ?>
-        marker_<?= $key ?>.setTitle("<?= $marker['title'] ?>");
-        <?php endif; ?>
-        <?php if (is_array($marker['position'])): ?>
-        marker_<?= $key ?>.setPosition(new google.maps.LatLng(<?= $marker['position'][0] ?>, <?= $marker['position'][1] ?>));
-        <?php if ($this->context->markerFitBounds): ?>
-        window.bounds.extend(marker_<?= $key ?>.position);
-        window.map.fitBounds(bounds);
-        <?php endif; ?>
-        <?php else: ?>
-        geocoder.geocode({
-            "address": "<?= $marker['position'] ?>"
-        }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                marker_<?= $key ?>.setPosition(results[0].geometry.location);
-                <?php if ($this->context->markerFitBounds): ?>
-                window.bounds.extend(results[0].geometry.location);
-                window.map.fitBounds(bounds);
-                <?php endif; ?>
-            }
-        });
-        <?php endif; ?>
-        <?php endforeach; ?>
-        <?php endif; ?>
-    }
-    function loadScript() {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "https://maps.googleapis.com/maps/api/js?key=<?= $this->context->apiKey ?>&sensor=<?= $this->context->sensor ?>&callback=initialize";
-        document.body.appendChild(script);
-    }
-    window.onload = loadScript;
-</script>

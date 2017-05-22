@@ -66,8 +66,8 @@ return [
             'bundles' => [
                 'dosamigos\google\maps\MapAsset' => [
                     'options' => [
-                        'key' => 'this_is_my_key',
-                        'language' => 'id',
+                        'key' => 'AIzaSyATYYHyqpRIoFN_j5WsHBhLRBbTk4PTpGg',
+                        'language' => 'ua',
                         'version' => '3.1.18'
                     ]
                 ]

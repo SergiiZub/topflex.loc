@@ -215,4 +215,9 @@ class SiteController extends Controller
     {
         return $this->render('myMap');
     }
+
+    public function actionGoogle()
+    {
+        return $this->render('map');
+    }
 }
