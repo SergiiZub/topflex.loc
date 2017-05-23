@@ -213,10 +213,6 @@ class SiteController extends Controller
 
     public function actionMap()
     {
-        $this->render('map');
-    }
-    public function actionMap1()
-    {
-        $this->render('map1');
+        return $this->render('myMap');
     }
 }

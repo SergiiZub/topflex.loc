@@ -13,7 +13,15 @@ $this->title = 'My Yii Application';
 
         <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
     </div>
-
+    <?php
+    use frontend\widgets\myWidget\myWidget;
+    ?>
+    <?php echo myWidget::widget(['message' => 'Good morning']); ?>
+    <?php
+        use frontend\widgets\googleMap\GoogleMap;
+        echo GoogleMap::widget(['location'=>['lat'=>50, 'lng'=>50]]);
+    ?>
+<!--    ?>-->
     <div class="body-content">
 
         <div class="row">

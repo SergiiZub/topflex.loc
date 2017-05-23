@@ -62,11 +62,22 @@ return [
         ],
         'assetManager' => [
             'basePath' => '@webroot/assets',
-            'baseUrl' => '@web/assets'
+            'baseUrl' => '@web/assets',
+            'bundles' => [
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+                        'key' => 'this_is_my_key',
+                        'language' => 'id',
+                        'version' => '3.1.18'
+                    ]
+                ]
+            ]
         ],
-/*        'request' => [
-            'baseUrl' => ''
-        ],*/
+
+
+        /*        'request' => [
+                    'baseUrl' => ''
+                ],*/
 
 
     ],
