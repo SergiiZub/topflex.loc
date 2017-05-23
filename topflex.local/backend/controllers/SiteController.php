@@ -22,6 +22,23 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+//                        'roles' => ['*'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+/*        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
                         'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
@@ -38,7 +55,7 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-        ];
+        ];*/
     }
 
     /**
@@ -68,7 +85,7 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionLogin()
+    /*public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -82,17 +99,17 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }*/
 
     /**
      * Logout action.
      *
      * @return string
      */
-    public function actionLogout()
+   /* public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
+    }*/
 }

@@ -11,8 +11,24 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
-    'modules' => [],
+    'bootstrap' => [
+        'log',
+        'users-admin',
+    ],
+    'modules' => [
+        // ID модуля может быть любой.
+        'users-admin' => [
+            'class' => 'mdm\admin\Module',
+            // Отключаем шаблон модуля,
+            // используем шаблон нашей админки.
+            'layout' => null,
+        ],
+        // ID модуля должен обязательно быть "user", иначе модуль не загрузится.
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'admins' => ['MegaAdmin'], // Хардкод для админского пользователя. После настройки прав доступа, нужно удалить эту строку.
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -69,6 +85,23 @@ return [
 //            'baseUrl' => '/admin'
 //        ]
 
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+//        'class' => 'mdm\admin\classes\AccessControl',
+        // Маршруты, открытые по умолчанию всегда.
+        // Открываем только для начальной разработки.
+        // Как только основные данные о ролях заполнены,
+        // убираем отсюда всё лишнее.
+        'allowActions' => [
+            // Маршруты модуля пользователей.
+            // Логин и так разрешён, но разлогиниться
+            // без этой настройки и без настроенных ролей не получится.
+            'user/*',
+            'site/*',
+            'users-admin/*',
+            'debug/*',
+        ]
     ],
     'params' => $params,
 ];
